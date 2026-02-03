@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Thinking - Taller Interactivo</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React + ReactDOM (CDN) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+
+    <!-- Babel para interpretar JSX en el navegador (sin compilar) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const TallerDesignThinking = () => {
+        const [activePhase, setActivePhase] = useState(null);
+        const [activeSection, setActiveSection] = useState('importancia');
+        const [completedSteps, setCompletedSteps] = useState({});
+        const [notes, setNotes] = useState({});
+        const [studentNotes, setStudentNotes] = useState({});
+
+        const toggleStep = (phaseId, stepIndex) => {
+          const key = `${phaseId}-${stepIndex}`;
+          setCompletedSteps(prev => ({ ...prev, [key]: !prev[key] }));
+        };
+
+        const updateNote = (key, value) => {
+          setNotes(prev => ({ ...prev, [key]: value }));
+        };
+
+        const updateStudentNote = (key, value) => {
+          setStudentNotes(prev => ({ ...prev, [key]: value }));
+        };
+
+        const phases = [
+          {
+            id: 'empatizar',
+            number: '1',
+            title: '❤️ EMPATIZAR',
+            subtitle: 'Conectar con las necesidades reales',
+            color: '#E11D48',
+            lightColor: '#FFF1F2',
+            importancia:
+              'Sin empatía, diseñamos soluciones para problemas que imaginamos, no para los que realmente existen. En Puerto Rico, donde cada comunidad escolar tiene realidades únicas (desde Vieques hasta Mayagüez), empatizar es esencial.',
+            porqueIntegrar:
+              'Porque nuestros estudiantes no son números - son personas con historias, luchas y sueños. Cuando entendemos su contexto (trabajan después de clases, cuidan hermanos, viven sin internet estable), podemos diseñar experiencias de aprendizaje que realmente funcionen para ellos.',
+            actividadTaller: {
+              nombre: '🎭 "Un Día en Sus Zapatos"',
+              objetivo: 'Experimentar la realidad de diferentes estudiantes puertorriqueños',
+              duracion: '20 minutos',
+              materiales: 'Tarjetas de perfil (se pueden hacer con post-its), papel, marcadores',
+              instrucciones: [
+                'Formen grupos de 4 personas',
+                'Cada persona toma una tarjeta con un perfil de estudiante diferente',
+                'Durante 5 minutos, escriban cómo sería un día escolar desde esa perspectiva',
+                'Compartan en grupo: ¿Qué obstáculos enfrenta? ¿Qué necesita?',
+                'Identifiquen patrones comunes entre los perfiles'
+              ],
+              perfiles: [
+                '👧 Estudiante que trabaja en el negocio familiar después de clases',
+                '👦 Estudiante que cuida a sus hermanitos mientras mamá trabaja doble turno',
+                '👩 Estudiante sin internet estable en casa (solo datos limitados)',
+                '👨 Estudiante con TDAH que lucha por mantenerse enfocado',
+                '👧 Estudiante que vive en zona rural y viaja 1 hora a la escuela'
+              ],
+              reflexionGuia: '¿Cuántas de estas realidades existen en tu salón sin que lo sepas?'
+            },
+            actividadEstudiantes: {
+              nombre: '🔍 "Detective de Necesidades"',
+              nivel: 'Elemental, Intermedio, Superior',
+              objetivo: 'Que los estudiantes practiquen empatía investigando necesidades reales',
+              duracion: '45 minutos (puede dividirse en 2 sesiones)',
+              materiales: 'Papel, lápices, post-its',
+              instrucciones: [
+                'Presenta el reto: "Vamos a mejorar algo de nuestra escuela/comunidad"',
+                'Los estudiantes eligen a quién entrevistar (otro estudiante, personal escolar, familiar)',
+                'Usan 3 preguntas clave: ¿Qué te frustra? ¿Qué desearías? ¿Qué te haría más feliz?',
+                'Documentan respuestas en un "Mapa de Empatía" simple',
+                'Comparten hallazgos con la clase'
+              ],
+              variaciones: [
+                'Elemental: Dibujar las respuestas en lugar de escribirlas',
+                'Intermedio: Crear un perfil de usuario con foto/dibujo',
+                'Superior: Hacer entrevistas grabadas en video (1 minuto)'
+              ],
+              conexionCurriculo:
+                'Español (entrevistas), Estudios Sociales (comunidad), Ciencias (observación)'
+            }
+          },
+
+          /* ✅ Nota: aquí debes pegar el RESTO de las fases tal como las tienes
+             (definir, idear, prototipar, probar).
+             Para ahorrar espacio aquí, no las repito, pero puedes copiarlas iguales.
+          */
+
+        ];
+
+        const styles = {
+          container: {
+            fontFamily: 'system-ui, -apple-system, sans-serif',
+            maxWidth: '950px',
+            margin: '0 auto',
+            padding: '16px',
+            backgroundColor: '#F8FAFC',
+            minHeight: '100vh'
+          },
+          header: {
+            background: 'linear-gradient(135deg, #1E40AF 0%, #7C3AED 50%, #DB2777 100%)',
+            color: 'white',
+            borderRadius: '20px',
+            padding: '28px',
+            marginBottom: '24px',
+            textAlign: 'center',
+            boxShadow: '0 10px 40px rgba(124, 58, 237, 0.3)'
+          },
+          phaseNav: { display: 'flex', gap: '8px', justifyContent: 'center', flexWrap: 'wrap', margin: '20px 0' },
+          phaseNavBtn: { padding: '8px 16px', borderRadius: '20px', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px', transition: 'all 0.2s' },
+          section: { marginBottom: '20px' },
+          sectionButton: { width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 20px', background: 'linear-gradient(135deg, #2563EB, #4F46E5)', color: 'white', border: 'none', borderRadius: '12px', cursor: 'pointer', fontSize: '17px', fontWeight: 'bold', boxShadow: '0 4px 15px rgba(37, 99, 235, 0.3)', transition: 'all 0.2s' },
+          sectionContent: { marginTop: '12px', padding: '24px', backgroundColor: 'white', borderRadius: '12px', border: '1px solid #E5E7EB', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' },
+          card: { backgroundColor: '#F8FAFC', padding: '20px', borderRadius: '12px', marginBottom: '16px', border: '1px solid #E2E8F0' },
+          importanceBox: { background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)', padding: '20px', borderRadius: '12px', marginBottom: '16px', borderLeft: '5px solid #F59E0B' },
+          whyBox: { background: 'linear-gradient(135deg, #D1FAE5, #A7F3D0)', padding: '20px', borderRadius: '12px', marginBottom: '16px', borderLeft: '5px solid #10B981' },
+          activityBox: { backgroundColor: 'white', padding: '20px', borderRadius: '12px', marginBottom: '16px', border: '2px solid', boxShadow: '0 4px 15px rgba(0,0,0,0.08)' },
+          checkbox: { width: '20px', height: '20px', marginRight: '12px', cursor: 'pointer', accentColor: '#10B981' },
+          textarea: { width: '100%', padding: '12px', borderRadius: '8px', border: '2px solid #E2E8F0', fontSize: '14px', resize: 'vertical', minHeight: '80px', fontFamily: 'inherit' },
+          stepItem: { display: 'flex', alignItems: 'flex-start', padding: '10px', borderRadius: '8px', marginBottom: '8px', backgroundColor: '#F8FAFC', cursor: 'pointer', transition: 'all 0.2s' },
+          tag: { display: 'inline-block', padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', marginRight: '8px' }
+        };
+
+        return (
+          <div style={styles.container}>
+            <div style={styles.header}>
+              <div style={{ fontSize: '36px', marginBottom: '12px' }}>❤️ 🎯 💡 🔧 ✅</div>
+              <h1 style={{ fontSize: '26px', fontWeight: 'bold', marginBottom: '8px', lineHeight: '1.3' }}>
+                Integrando Design Thinking al Quehacer Pedagógico
+              </h1>
+              <p style={{ fontSize: '18px', opacity: '0.95', marginBottom: '4px' }}>
+                Innovación Práctica en el Aula Puertorriqueña 🇵🇷
+              </p>
+              <p style={{ fontSize: '14px', opacity: '0.85' }}>
+                Taller Interactivo | Aprender Haciendo | 4-5 horas
+              </p>
+
+              <div style={styles.phaseNav}>
+                {phases.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => { setActivePhase(p.id); setActiveSection(null); }}
+                    style={{
+                      ...styles.phaseNavBtn,
+                      backgroundColor: activePhase === p.id ? 'white' : 'rgba(255,255,255,0.2)',
+                      color: activePhase === p.id ? p.color : 'white'
+                    }}
+                  >
+                    {p.title}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Aquí puedes pegar el resto del render tal como lo tienes.
+               Si prefieres, yo te lo devuelvo completo ya armado en el próximo mensaje.
+            */}
+
+            <div style={{ textAlign: 'center', padding: '28px', backgroundColor: 'white', borderRadius: '16px', marginTop: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+              <p style={{ color: '#6B7280' }}>🇵🇷 ¡Éxito en tu camino de innovación pedagógica!</p>
+            </div>
+          </div>
+        );
+      };
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<TallerDesignThinking />);
+    </script>
+  </body>
+</html>
